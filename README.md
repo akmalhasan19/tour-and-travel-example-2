@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NusaTrip MVP - Tour & Travel Website
 
-## Getting Started
+MVP website jasa Tour & Travel berbasis Next.js App Router + Tailwind CSS. Data masih mock/localStorage. Supabase disiapkan untuk readiness (schema + docs + env template), tetapi **belum** dipakai di app code.
 
-First, run the development server:
+## Tech Stack
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- ESLint default Next.js
+
+## Run Locally
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Jalankan development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Build production:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Lint:
 
-## Learn More
+```bash
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Routes
+### Public
+- `/`
+- `/tours`
+- `/tours/[slug]`
+- `/booking`
+- `/booking/success`
+- `/faq`
+- `/about`
+- `/contact`
+- `/terms`
+- `/privacy`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Admin (tanpa auth, pseudo-admin)
+- `/admin`
+- `/admin/tours`
+- `/admin/tours/new`
+- `/admin/tours/[id]/edit`
+- `/admin/bookings`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### SEO/System
+- `/sitemap.xml`
+- `/robots.txt`
+- custom `404` page
 
-## Deploy on Vercel
+## Fitur MVP yang Sudah Dibuat
+- Home landing dengan hero, paket populer, alasan pilih kami, testimoni, FAQ snippet.
+- Listing paket tour:
+  - Search keyword
+  - Filter category, durasi, min/max harga
+  - Sort harga/rating
+  - Pagination client-side
+- Detail paket tour:
+  - Hero + mini gallery
+  - Highlight, itinerary, include/exclude
+  - Meeting point + jadwal
+  - CTA `Book Now` ke booking prefilled
+- Booking form:
+  - Validasi client-side basic
+  - Simpan ke localStorage mock booking store
+  - Halaman sukses + ringkasan booking
+  - Disclaimer pembayaran manual
+- Contact page:
+  - Form submit mock (inline alert)
+  - Info kantor + jam operasional
+- Admin tanpa auth:
+  - Dashboard ringkas
+  - CRUD tours (create/edit/delete + modal konfirmasi)
+  - List booking + filter status + update status
+- SEO basic:
+  - Metadata per page
+  - OpenGraph dasar
+  - Sitemap + robots
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Struktur Data Mock
+- `src/lib/mock/tours.seed.ts` (seed 20 destinasi Indonesia)
+- `src/lib/mock/tours.store.ts`:
+  - `listTours(params)`
+  - `getTourBySlug(slug)`
+  - `getTourById(id)`
+  - `createTour(data)`
+  - `updateTour(id, data)`
+  - `deleteTour(id)`
+- `src/lib/mock/bookings.store.ts`:
+  - `listBookings()`
+  - `createBooking(data)`
+  - `updateBookingStatus(id, status)`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Supabase Readiness (Belum Terintegrasi)
+- `supabase/schema.sql`: tabel `tours`, `tour_itineraries`, `bookings`, `contact_messages`.
+- `supabase/README.md`: langkah setup project, env, execute schema, dan rencana integrasi lanjutan.
+- `.env.example`:
+  - `NEXT_PUBLIC_SUPABASE_URL=`
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY=`
+
+## Catatan Batasan MVP
+- Belum ada auth/akun user.
+- Belum ada payment gateway.
+- Belum ada realtime seat management.
+- Belum ada upload storage/image management backend.
+- Belum ada integrasi Supabase client di app code.
+
+## Next Steps
+1. Integrasi Supabase data layer (server actions/route handlers).
+2. Aktifkan auth admin.
+3. Aktifkan RLS policy untuk produksi.
+4. Pindahkan booking/contact submit ke database.
